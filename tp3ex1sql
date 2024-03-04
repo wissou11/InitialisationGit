@@ -1,0 +1,24 @@
+set serveroutput on
+accept s_id prompt 'entrer l''id de l''employé'
+declare
+TYPE location_type is record (
+location_id locations.location_id%type,
+street_address locations.street_address%type,
+postal_code locations.postal_code%type,
+city locations.city%type
+);
+TYPE department_type is record (
+department_id departments.department_id%type,
+department_name departments.department_name%type,
+location_department location_type
+);
+depart department_type;
+begin
+SELECT d.department_id,d.department_name,l.location_id,l.street_address,l.postal_code,l.city INTO depart.department_id,depart.department_name,depart.location_department.location_id,depart.location_department.street_address,depart.location_department.postal_code,depart.location_department.city
+FROM departments d
+JOIN locations l on d.location_id = l.location_id
+WHERE d.department_id = v_department_id;
+     DBMS_OUTPUT.PUT_LINE('Département : ' || depart.department_id || ' - ' || depart.department_name);
+    DBMS_OUTPUT.PUT_LINE('Location : ' || depart.location_department.street_address || ' - ' || depart.location_department.postal_code || ' - ' || depart.location_department.city);
+END;
+/
